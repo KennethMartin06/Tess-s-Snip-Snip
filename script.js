@@ -138,6 +138,10 @@ dateInput.setAttribute('min', today);
 
 const TESS_WHATSAPP = '918714890772';
 
+function markSent(el) {
+  setTimeout(() => el.classList.add('sent'), 300);
+}
+
 function setWhatsAppLinks(formData) {
   const phone = formData.phone.replace(/\D/g, '');
   const customerPhone = phone.startsWith('91') ? phone : '91' + phone;
@@ -199,6 +203,7 @@ bookAnother.addEventListener('click', () => {
   bookingForm.reset();
   bookingForm.classList.remove('hidden');
   bookingSuccess.classList.remove('active');
+  document.querySelectorAll('.whatsapp-btn').forEach(btn => btn.classList.remove('sent'));
 });
 
 // ===== STAR RATING =====

@@ -343,11 +343,13 @@
         <h3>You're Booked!</h3>
         <p>Your reservation has been confirmed! Send a confirmation via WhatsApp:</p>
         <div class="whatsapp-buttons">
-          <a id="whatsappTess" class="btn btn-primary whatsapp-btn" href="#" target="_blank">
-            Send Booking to Tess
+          <a id="whatsappTess" class="btn btn-primary whatsapp-btn" href="#" target="_blank" onclick="markSent(this)">
+            <span class="wa-label">Send Booking to Tess</span>
+            <span class="wa-sent">&#10003; Sent</span>
           </a>
-          <a id="whatsappSelf" class="btn btn-outline whatsapp-btn" href="#" target="_blank">
-            Send Yourself a Confirmation
+          <a id="whatsappSelf" class="btn btn-outline whatsapp-btn" href="#" target="_blank" onclick="markSent(this)">
+            <span class="wa-label">Send Yourself a Confirmation</span>
+            <span class="wa-sent">&#10003; Sent</span>
           </a>
         </div>
         <button class="btn btn-outline" id="bookAnother" style="margin-top: 1rem;">Book Another Slot</button>

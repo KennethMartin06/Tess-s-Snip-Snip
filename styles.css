@@ -446,6 +446,19 @@ body.light .btn-book:hover { color: #fff; }
 .whatsapp-btn.btn-primary:hover { background: var(--clr-accent); color: var(--clr-bg); transform: translateY(-2px); }
 .whatsapp-btn.btn-outline { border: 1.5px solid var(--clr-accent); color: var(--clr-accent); background: transparent; }
 .whatsapp-btn.btn-outline:hover { background: var(--clr-accent); color: var(--clr-bg); transform: translateY(-2px); }
+.wa-sent { display: none; }
+.whatsapp-btn.sent .wa-label { display: none; }
+.whatsapp-btn.sent .wa-sent { display: inline; }
+.whatsapp-btn.sent {
+  background: var(--clr-accent) !important; color: var(--clr-bg) !important;
+  border-color: var(--clr-accent) !important; pointer-events: none;
+  animation: sentPulse 0.4s ease;
+}
+@keyframes sentPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
 
 /* ===== FOOTER ===== */
 .footer { background: var(--clr-bg); border-top: 1px solid var(--clr-border); padding: 64px 0 0; }
