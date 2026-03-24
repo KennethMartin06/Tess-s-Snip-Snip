@@ -139,20 +139,9 @@ dateInput.setAttribute('min', today);
 const TESS_WHATSAPP = '918714890772';
 
 function sendWhatsAppConfirmation(formData) {
-  const phone = formData.phone.replace(/\D/g, '');
-  const customerPhone = phone.startsWith('91') ? phone : '91' + phone;
+  const message = `Hi Tess! I'd like to confirm my booking:\n\nName: ${formData.name}\nPhone: ${formData.phone}\nService: ${formData.service}\nDate: ${formData.date}\nTime: ${formData.time}${formData.notes ? '\nNotes: ' + formData.notes : ''}`;
 
-  const message = `Hi ${formData.name}! Your booking at Tess's Snip Snip is confirmed!\n\nService: ${formData.service}\nDate: ${formData.date}\nTime: ${formData.time}\n${formData.notes ? 'Notes: ' + formData.notes + '\n' : ''}\nSee you soon! - Tess`;
-
-  const tessMessage = `New Booking!\n\nName: ${formData.name}\nPhone: ${formData.phone}\nService: ${formData.service}\nDate: ${formData.date}\nTime: ${formData.time}\n${formData.notes ? 'Notes: ' + formData.notes : ''}`;
-
-  // Send confirmation to customer
-  window.open(`https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`, '_blank');
-
-  // After a short delay, open Tess's chat with booking details
-  setTimeout(() => {
-    window.open(`https://wa.me/${TESS_WHATSAPP}?text=${encodeURIComponent(tessMessage)}`, '_blank');
-  }, 1500);
+  window.open(`https://wa.me/${TESS_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 bookingForm.addEventListener('submit', (e) => {
