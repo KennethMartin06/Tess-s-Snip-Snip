@@ -266,6 +266,15 @@ body.theme-switching *::after {
 .service-card h3 { font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 10px; }
 .service-card p { font-size: .88rem; color: var(--clr-text-muted); line-height: 1.6; margin-bottom: 16px; }
 .service-price { font-size: .85rem; font-weight: 600; color: var(--clr-accent); letter-spacing: .04em; }
+.btn-book {
+  margin-top: 16px; padding: 10px 24px; border-radius: 50px; font-size: .82rem; font-weight: 500;
+  background: transparent; color: var(--clr-accent); border: 1.5px solid var(--clr-accent);
+  cursor: pointer; opacity: 0; transform: translateY(8px);
+  transition: opacity .3s ease, transform .3s ease, background .3s ease, color .3s ease;
+}
+.service-card:hover .btn-book { opacity: 1; transform: translateY(0); }
+.btn-book:hover { background: var(--clr-accent); color: var(--clr-bg); }
+body.light .btn-book:hover { color: #fff; }
 
 /* ===== GALLERY ===== */
 .gallery { background: var(--clr-surface); }

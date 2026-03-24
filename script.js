@@ -295,6 +295,31 @@ addReviewForm.addEventListener('submit', (e) => {
     });
 })();
 
+// ===== SERVICE CARD BOOKING =====
+document.querySelectorAll('.service-card').forEach(card => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => {
+    const serviceName = card.dataset.service;
+    if (!serviceName) return;
+
+    // Pre-select the service in the booking form
+    const serviceSelect = document.getElementById('serviceSelect');
+    for (let i = 0; i < serviceSelect.options.length; i++) {
+      if (serviceSelect.options[i].text === serviceName) {
+        serviceSelect.selectedIndex = i;
+        break;
+      }
+    }
+
+    // Make sure form is visible
+    bookingForm.classList.remove('hidden');
+    bookingSuccess.classList.remove('active');
+
+    // Scroll to booking
+    document.getElementById('booking').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
 // ===== SCROLL ANIMATIONS =====
 const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -40px 0px' };
 const observer = new IntersectionObserver((entries) => {
