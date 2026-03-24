@@ -1,3 +1,40 @@
+// ===== GOOGLE SHEETS BACKEND =====
+const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+
+function sendToGoogleSheets(data) {
+  if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+    console.warn('Google Script URL not set. Data saved to localStorage only.');
+    return Promise.resolve();
+  }
+  return fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+}
+
+function createReviewCard(r) {
+  const starFull = '\u2605';
+  const starEmpty = '\u2606';
+  const starsHTML = starFull.repeat(r.rating) + starEmpty.repeat(5 - r.rating);
+  const initial = r.name.charAt(0).toUpperCase();
+  const card = document.createElement('div');
+  card.className = 'review-card fade-in visible';
+  card.innerHTML = `
+    <div class="review-stars">${starsHTML}</div>
+    <p class="review-text">"${r.text}"</p>
+    <div class="review-author">
+      <div class="review-avatar">${initial}</div>
+      <div>
+        <strong>${r.name}</strong>
+        ${r.detail ? `<span>${r.detail}</span>` : ''}
+      </div>
+    </div>
+  `;
+  return card;
+}
+
 // ===== NAVBAR SCROLL =====
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
@@ -13,7 +50,6 @@ navToggle.addEventListener('click', () => {
   navLinks.classList.toggle('open');
 });
 
-// Close mobile nav on link click
 navLinks.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => {
     navToggle.classList.remove('active');
@@ -30,7 +66,7 @@ let reviewIndex = 0;
 function getCardWidth() {
   const card = track.querySelector('.review-card');
   if (!card) return 364;
-  return card.offsetWidth + 24; // card width + gap
+  return card.offsetWidth + 24;
 }
 
 function getVisibleCards() {
@@ -48,20 +84,13 @@ function slideReviews() {
 }
 
 nextBtn.addEventListener('click', () => {
-  if (reviewIndex < getMaxIndex()) {
-    reviewIndex++;
-    slideReviews();
-  }
+  if (reviewIndex < getMaxIndex()) { reviewIndex++; slideReviews(); }
 });
 
 prevBtn.addEventListener('click', () => {
-  if (reviewIndex > 0) {
-    reviewIndex--;
-    slideReviews();
-  }
+  if (reviewIndex > 0) { reviewIndex--; slideReviews(); }
 });
 
-// Reset position on resize
 window.addEventListener('resize', () => {
   reviewIndex = Math.min(reviewIndex, getMaxIndex());
   slideReviews();
@@ -73,15 +102,18 @@ const bookingSuccess = document.getElementById('bookingSuccess');
 const bookAnother = document.getElementById('bookAnother');
 const dateInput = document.getElementById('dateSelect');
 
-// Set minimum date to today
 const today = new Date().toISOString().split('T')[0];
 dateInput.setAttribute('min', today);
 
 bookingForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  // Gather form data
+  const submitBtn = bookingForm.querySelector('button[type="submit"]');
+  submitBtn.textContent = 'Sending...';
+  submitBtn.disabled = true;
+
   const formData = {
+    type: 'booking',
     name: document.getElementById('clientName').value,
     phone: document.getElementById('clientPhone').value,
     service: document.getElementById('serviceSelect').value,
@@ -90,14 +122,28 @@ bookingForm.addEventListener('submit', (e) => {
     notes: document.getElementById('notesField').value
   };
 
-  // Store in localStorage as simple booking log
-  const bookings = JSON.parse(localStorage.getItem('tess_snipsnip_bookings') || '[]');
-  bookings.push({ ...formData, bookedAt: new Date().toISOString() });
-  localStorage.setItem('tess_snipsnip_bookings', JSON.stringify(bookings));
+  // Save to Google Sheets
+  sendToGoogleSheets(formData).then(() => {
+    // Also save to localStorage as backup
+    const bookings = JSON.parse(localStorage.getItem('tess_snipsnip_bookings') || '[]');
+    bookings.push({ ...formData, bookedAt: new Date().toISOString() });
+    localStorage.setItem('tess_snipsnip_bookings', JSON.stringify(bookings));
 
-  // Show success state
-  bookingForm.classList.add('hidden');
-  bookingSuccess.classList.add('active');
+    bookingForm.classList.add('hidden');
+    bookingSuccess.classList.add('active');
+    submitBtn.textContent = 'Confirm Reservation';
+    submitBtn.disabled = false;
+  }).catch(() => {
+    // Still save locally if Google Sheets fails
+    const bookings = JSON.parse(localStorage.getItem('tess_snipsnip_bookings') || '[]');
+    bookings.push({ ...formData, bookedAt: new Date().toISOString() });
+    localStorage.setItem('tess_snipsnip_bookings', JSON.stringify(bookings));
+
+    bookingForm.classList.add('hidden');
+    bookingSuccess.classList.add('active');
+    submitBtn.textContent = 'Confirm Reservation';
+    submitBtn.disabled = false;
+  });
 });
 
 bookAnother.addEventListener('click', () => {
@@ -146,74 +192,76 @@ addReviewForm.addEventListener('submit', (e) => {
     return;
   }
 
+  const submitBtn = addReviewForm.querySelector('button[type="submit"]');
+  submitBtn.textContent = 'Sending...';
+  submitBtn.disabled = true;
+
   const name = document.getElementById('reviewName').value.trim();
   const detail = document.getElementById('reviewDetail').value.trim();
   const text = document.getElementById('reviewText').value.trim();
 
-  // Create new review card and add to carousel
-  const starFull = '\u2605';
-  const starEmpty = '\u2606';
-  const starsHTML = starFull.repeat(selectedRating) + starEmpty.repeat(5 - selectedRating);
-  const initial = name.charAt(0).toUpperCase();
+  const reviewData = {
+    type: 'review',
+    name,
+    detail,
+    rating: selectedRating,
+    text
+  };
 
-  const card = document.createElement('div');
-  card.className = 'review-card fade-in visible';
-  card.innerHTML = `
-    <div class="review-stars">${starsHTML}</div>
-    <p class="review-text">"${text}"</p>
-    <div class="review-author">
-      <div class="review-avatar">${initial}</div>
-      <div>
-        <strong>${name}</strong>
-        ${detail ? `<span>${detail}</span>` : ''}
-      </div>
-    </div>
-  `;
-  track.appendChild(card);
+  // Send to Google Sheets
+  sendToGoogleSheets(reviewData).then(() => {
+    // Add card to carousel
+    track.appendChild(createReviewCard(reviewData));
 
-  // Save to localStorage
-  const reviews = JSON.parse(localStorage.getItem('tess_snipsnip_reviews') || '[]');
-  reviews.push({ name, detail, text, rating: selectedRating, createdAt: new Date().toISOString() });
-  localStorage.setItem('tess_snipsnip_reviews', JSON.stringify(reviews));
+    // Show success
+    addReviewForm.classList.add('hidden');
+    reviewSuccess.classList.add('active');
+    submitBtn.textContent = 'Submit Review';
+    submitBtn.disabled = false;
 
-  // Show success
-  addReviewForm.classList.add('hidden');
-  reviewSuccess.classList.add('active');
+    setTimeout(() => {
+      addReviewForm.reset();
+      selectedRating = 0;
+      ratingInput.value = 0;
+      stars.forEach(s => s.classList.remove('active'));
+      addReviewForm.classList.remove('hidden');
+      reviewSuccess.classList.remove('active');
+    }, 3000);
+  }).catch(() => {
+    // Still add locally if sheets fails
+    track.appendChild(createReviewCard(reviewData));
+    addReviewForm.classList.add('hidden');
+    reviewSuccess.classList.add('active');
+    submitBtn.textContent = 'Submit Review';
+    submitBtn.disabled = false;
 
-  // Reset after 3 seconds
-  setTimeout(() => {
-    addReviewForm.reset();
-    selectedRating = 0;
-    ratingInput.value = 0;
-    stars.forEach(s => s.classList.remove('active'));
-    addReviewForm.classList.remove('hidden');
-    reviewSuccess.classList.remove('active');
-  }, 3000);
+    setTimeout(() => {
+      addReviewForm.reset();
+      selectedRating = 0;
+      ratingInput.value = 0;
+      stars.forEach(s => s.classList.remove('active'));
+      addReviewForm.classList.remove('hidden');
+      reviewSuccess.classList.remove('active');
+    }, 3000);
+  });
 });
 
-// ===== LOAD SAVED REVIEWS =====
-(function loadSavedReviews() {
-  const reviews = JSON.parse(localStorage.getItem('tess_snipsnip_reviews') || '[]');
-  const starFull = '\u2605';
-  const starEmpty = '\u2606';
-  reviews.forEach(r => {
-    const starsHTML = starFull.repeat(r.rating) + starEmpty.repeat(5 - r.rating);
-    const initial = r.name.charAt(0).toUpperCase();
-    const card = document.createElement('div');
-    card.className = 'review-card';
-    card.innerHTML = `
-      <div class="review-stars">${starsHTML}</div>
-      <p class="review-text">"${r.text}"</p>
-      <div class="review-author">
-        <div class="review-avatar">${initial}</div>
-        <div>
-          <strong>${r.name}</strong>
-          ${r.detail ? `<span>${r.detail}</span>` : ''}
-        </div>
-      </div>
-    `;
-    track.appendChild(card);
-  });
+// ===== LOAD REVIEWS FROM GOOGLE SHEETS =====
+(function loadReviews() {
+  if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL_HERE') return;
+
+  fetch(GOOGLE_SCRIPT_URL)
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success' && data.reviews) {
+        data.reviews.forEach(r => {
+          track.appendChild(createReviewCard(r));
+        });
+      }
+    })
+    .catch(() => {
+      console.warn('Could not load reviews from Google Sheets.');
+    });
 })();
 
 // ===== SCROLL ANIMATIONS =====
@@ -226,7 +274,6 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, observerOptions);
 
-// Add fade-in class to animatable elements
 document.querySelectorAll('.service-card, .review-card, .gallery-item, .about-stat, .booking-form, .showcase-item, .add-review-wrapper').forEach(el => {
   el.classList.add('fade-in');
   observer.observe(el);

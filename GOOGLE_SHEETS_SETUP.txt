@@ -1,0 +1,44 @@
+=====================================================
+  GOOGLE SHEETS BACKEND SETUP - Tess's Snip Snip
+=====================================================
+
+STEP 1: Create a Google Sheet
+------------------------------
+1. Go to https://sheets.google.com and create a new spreadsheet
+2. Name it "Tess SnipSnip Data"
+3. Rename the first sheet tab to: Bookings
+4. Add a second sheet tab named: Reviews
+5. In the "Bookings" sheet, add these headers in Row 1:
+   A1: Timestamp | B1: Name | C1: Phone | D1: Service | E1: Date | F1: Time | G1: Notes
+6. In the "Reviews" sheet, add these headers in Row 1:
+   A1: Timestamp | B1: Name | C1: Detail | D1: Rating | E1: Review
+
+STEP 2: Create the Apps Script
+-------------------------------
+1. In your Google Sheet, go to Extensions > Apps Script
+2. Delete any code in the editor
+3. Copy and paste the ENTIRE code from the file "google-apps-script.js" in this project folder
+4. Click the save icon (or Ctrl+S)
+5. Name the project "SnipSnip Backend"
+
+STEP 3: Deploy as Web App
+---------------------------
+1. Click "Deploy" > "New deployment"
+2. Click the gear icon next to "Select type" and choose "Web app"
+3. Set:
+   - Description: "SnipSnip Backend"
+   - Execute as: "Me"
+   - Who has access: "Anyone"
+4. Click "Deploy"
+5. It will ask for authorization - click "Review Permissions", choose your Google account,
+   click "Advanced" > "Go to SnipSnip Backend (unsafe)" > "Allow"
+6. Copy the Web App URL (it looks like: https://script.google.com/macros/s/XXXXX/exec)
+
+STEP 4: Add the URL to your website
+-------------------------------------
+1. Open script.js in the project folder
+2. Find the line: const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+3. Replace YOUR_GOOGLE_SCRIPT_URL_HERE with your Web App URL
+4. Save, commit, and push to GitHub
+
+That's it! Bookings and reviews will now appear in your Google Sheet.
