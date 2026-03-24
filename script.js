@@ -136,6 +136,25 @@ const dateInput = document.getElementById('dateSelect');
 const today = new Date().toISOString().split('T')[0];
 dateInput.setAttribute('min', today);
 
+const TESS_WHATSAPP = '918714890772';
+
+function sendWhatsAppConfirmation(formData) {
+  const phone = formData.phone.replace(/\D/g, '');
+  const customerPhone = phone.startsWith('91') ? phone : '91' + phone;
+
+  const message = `Hi ${formData.name}! Your booking at Tess's Snip Snip is confirmed!\n\nService: ${formData.service}\nDate: ${formData.date}\nTime: ${formData.time}\n${formData.notes ? 'Notes: ' + formData.notes + '\n' : ''}\nSee you soon! - Tess`;
+
+  const tessMessage = `New Booking!\n\nName: ${formData.name}\nPhone: ${formData.phone}\nService: ${formData.service}\nDate: ${formData.date}\nTime: ${formData.time}\n${formData.notes ? 'Notes: ' + formData.notes : ''}`;
+
+  // Send confirmation to customer
+  window.open(`https://wa.me/${customerPhone}?text=${encodeURIComponent(message)}`, '_blank');
+
+  // After a short delay, open Tess's chat with booking details
+  setTimeout(() => {
+    window.open(`https://wa.me/${TESS_WHATSAPP}?text=${encodeURIComponent(tessMessage)}`, '_blank');
+  }, 1500);
+}
+
 bookingForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
@@ -155,20 +174,24 @@ bookingForm.addEventListener('submit', (e) => {
 
   // Save to Google Sheets
   sendToGoogleSheets(formData).then(() => {
-    // Also save to localStorage as backup
     const bookings = JSON.parse(localStorage.getItem('tess_snipsnip_bookings') || '[]');
     bookings.push({ ...formData, bookedAt: new Date().toISOString() });
     localStorage.setItem('tess_snipsnip_bookings', JSON.stringify(bookings));
+
+    // Send WhatsApp confirmation
+    sendWhatsAppConfirmation(formData);
 
     bookingForm.classList.add('hidden');
     bookingSuccess.classList.add('active');
     submitBtn.textContent = 'Confirm Reservation';
     submitBtn.disabled = false;
   }).catch(() => {
-    // Still save locally if Google Sheets fails
     const bookings = JSON.parse(localStorage.getItem('tess_snipsnip_bookings') || '[]');
     bookings.push({ ...formData, bookedAt: new Date().toISOString() });
     localStorage.setItem('tess_snipsnip_bookings', JSON.stringify(bookings));
+
+    // Still send WhatsApp even if Sheets fails
+    sendWhatsAppConfirmation(formData);
 
     bookingForm.classList.add('hidden');
     bookingSuccess.classList.add('active');
