@@ -41,9 +41,9 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   border: none; transition: var(--transition);
 }
 .btn-primary {
-  background: var(--clr-accent); color: var(--clr-bg);
+  background: transparent; color: var(--clr-accent); border: 1.5px solid var(--clr-accent);
 }
-.btn-primary:hover { background: var(--clr-accent-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,124,.25); }
+.btn-primary:hover { background: var(--clr-accent); color: var(--clr-bg); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,124,.25); }
 .btn-outline {
   background: transparent; color: var(--clr-accent); border: 1.5px solid var(--clr-accent);
 }
