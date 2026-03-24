@@ -341,8 +341,16 @@
       <div class="booking-success" id="bookingSuccess">
         <div class="success-icon">&#10003;</div>
         <h3>You're Booked!</h3>
-        <p>Your reservation has been confirmed. We'll reach out on WhatsApp to confirm details. See you soon!</p>
-        <button class="btn btn-outline" id="bookAnother">Book Another Slot</button>
+        <p>Your reservation has been confirmed! Send a confirmation via WhatsApp:</p>
+        <div class="whatsapp-buttons">
+          <a id="whatsappTess" class="btn btn-primary whatsapp-btn" href="#" target="_blank">
+            Send Booking to Tess
+          </a>
+          <a id="whatsappSelf" class="btn btn-outline whatsapp-btn" href="#" target="_blank">
+            Send Yourself a Confirmation
+          </a>
+        </div>
+        <button class="btn btn-outline" id="bookAnother" style="margin-top: 1rem;">Book Another Slot</button>
       </div>
     </div>
   </section>

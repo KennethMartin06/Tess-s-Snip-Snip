@@ -138,10 +138,16 @@ dateInput.setAttribute('min', today);
 
 const TESS_WHATSAPP = '918714890772';
 
-function sendWhatsAppConfirmation(formData) {
-  const message = `Hi Tess! I'd like to confirm my booking:\n\nName: ${formData.name}\nPhone: ${formData.phone}\nService: ${formData.service}\nDate: ${formData.date}\nTime: ${formData.time}${formData.notes ? '\nNotes: ' + formData.notes : ''}`;
+function setWhatsAppLinks(formData) {
+  const phone = formData.phone.replace(/\D/g, '');
+  const customerPhone = phone.startsWith('91') ? phone : '91' + phone;
 
-  window.open(`https://wa.me/${TESS_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
+  const tessMessage = `Hi Tess! I'd like to confirm my booking:\n\nName: ${formData.name}\nPhone: ${formData.phone}\nService: ${formData.service}\nDate: ${formData.date}\nTime: ${formData.time}${formData.notes ? '\nNotes: ' + formData.notes : ''}`;
+
+  const selfMessage = `Booking Confirmed at Tess's Snip Snip!\n\nService: ${formData.service}\nDate: ${formData.date}\nTime: ${formData.time}${formData.notes ? '\nNotes: ' + formData.notes : ''}\n\nLocation: Girls Hostel, Symbiosis`;
+
+  document.getElementById('whatsappTess').href = `https://wa.me/${TESS_WHATSAPP}?text=${encodeURIComponent(tessMessage)}`;
+  document.getElementById('whatsappSelf').href = `https://wa.me/${customerPhone}?text=${encodeURIComponent(selfMessage)}`;
 }
 
 bookingForm.addEventListener('submit', (e) => {
@@ -168,7 +174,7 @@ bookingForm.addEventListener('submit', (e) => {
     localStorage.setItem('tess_snipsnip_bookings', JSON.stringify(bookings));
 
     // Send WhatsApp confirmation
-    sendWhatsAppConfirmation(formData);
+    setWhatsAppLinks(formData);
 
     bookingForm.classList.add('hidden');
     bookingSuccess.classList.add('active');
@@ -180,7 +186,7 @@ bookingForm.addEventListener('submit', (e) => {
     localStorage.setItem('tess_snipsnip_bookings', JSON.stringify(bookings));
 
     // Still send WhatsApp even if Sheets fails
-    sendWhatsAppConfirmation(formData);
+    setWhatsAppLinks(formData);
 
     bookingForm.classList.add('hidden');
     bookingSuccess.classList.add('active');
