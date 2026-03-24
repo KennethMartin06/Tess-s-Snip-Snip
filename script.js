@@ -37,6 +37,7 @@ function createReviewCard(r) {
 
 // ===== THEME TOGGLE =====
 const themeToggle = document.getElementById('themeToggle');
+const themeOverlay = document.getElementById('themeOverlay');
 const savedTheme = localStorage.getItem('tess_snipsnip_theme');
 
 if (savedTheme === 'light') {
@@ -44,11 +45,46 @@ if (savedTheme === 'light') {
   themeToggle.innerHTML = '&#9728;';
 }
 
-themeToggle.addEventListener('click', () => {
-  document.body.classList.toggle('light');
-  const isLight = document.body.classList.contains('light');
-  themeToggle.innerHTML = isLight ? '&#9728;' : '&#9790;';
-  localStorage.setItem('tess_snipsnip_theme', isLight ? 'light' : 'dark');
+themeToggle.addEventListener('click', (e) => {
+  const goingLight = !document.body.classList.contains('light');
+
+  // Position the radial gradient from the button
+  const rect = themeToggle.getBoundingClientRect();
+  const x = ((rect.left + rect.width / 2) / window.innerWidth * 100).toFixed(1);
+  const y = ((rect.top + rect.height / 2) / window.innerHeight * 100).toFixed(1);
+  themeOverlay.style.setProperty('--tx', x + '%');
+  themeOverlay.style.setProperty('--ty', y + '%');
+
+  // Spin the icon
+  themeToggle.classList.add('spin');
+  setTimeout(() => themeToggle.classList.remove('spin'), 500);
+
+  // Flash overlay
+  themeOverlay.className = 'theme-transition-overlay ' + (goingLight ? 'to-light' : 'to-dark');
+  requestAnimationFrame(() => {
+    themeOverlay.classList.add('active');
+  });
+
+  // Enable smooth transitions on all elements
+  document.body.classList.add('theme-switching');
+
+  // Switch theme at the peak of the flash
+  setTimeout(() => {
+    document.body.classList.toggle('light');
+    const isLight = document.body.classList.contains('light');
+    themeToggle.innerHTML = isLight ? '&#9728;' : '&#9790;';
+    localStorage.setItem('tess_snipsnip_theme', isLight ? 'light' : 'dark');
+  }, 150);
+
+  // Remove overlay and transition class
+  setTimeout(() => {
+    themeOverlay.classList.remove('active');
+  }, 500);
+
+  setTimeout(() => {
+    themeOverlay.className = 'theme-transition-overlay';
+    document.body.classList.remove('theme-switching');
+  }, 900);
 });
 
 // ===== NAVBAR SCROLL =====
