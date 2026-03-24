@@ -2,7 +2,7 @@
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzGk5YUKY3U3wa7DP-2ns75COI0T9Hw6zejUku5sbNVM08vUDXASqra01QJjeIExzlv/exec';
 
 function sendToGoogleSheets(data) {
-  if (GOOGLE_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzGk5YUKY3U3wa7DP-2ns75COI0T9Hw6zejUku5sbNVM08vUDXASqra01QJjeIExzlv/exec') {
+  if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
     console.warn('Google Script URL not set. Data saved to localStorage only.');
     return Promise.resolve();
   }
