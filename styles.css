@@ -98,32 +98,26 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   background: none; border: 1.5px solid var(--clr-border); border-radius: 50%;
   width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center;
   font-size: 1.1rem; color: var(--clr-text); transition: var(--transition);
-  margin-right: 8px; position: relative; overflow: hidden;
+  margin-right: 8px;
 }
-.theme-toggle:hover { border-color: var(--clr-accent); color: var(--clr-accent); transform: rotate(20deg); }
-.theme-toggle.spin { animation: toggleSpin .5s ease; }
+.theme-toggle:hover { border-color: var(--clr-accent); color: var(--clr-accent); }
+.theme-toggle.spin { animation: toggleSpin .6s cubic-bezier(.4,0,.2,1); }
 @keyframes toggleSpin {
   0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(0.6); opacity: .4; }
-  100% { transform: rotate(360deg) scale(1); opacity: 1; }
+  40% { transform: rotate(200deg) scale(0.85); }
+  100% { transform: rotate(360deg) scale(1); }
 }
-
-/* Theme transition overlay */
-.theme-transition-overlay {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  z-index: 9999; pointer-events: none; opacity: 0;
-  transition: opacity .3s ease;
-}
-.theme-transition-overlay.active { opacity: 1; }
-.theme-transition-overlay.to-light { background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), #f5f0eb 0%, transparent 70%); }
-.theme-transition-overlay.to-dark { background: radial-gradient(circle at var(--tx, 50%) var(--ty, 50%), #0e0e0e 0%, transparent 70%); }
 
 /* Smooth color transitions on theme change */
 body.theme-switching,
 body.theme-switching *,
 body.theme-switching *::before,
 body.theme-switching *::after {
-  transition: background-color .6s ease, color .6s ease, border-color .6s ease, box-shadow .6s ease !important;
+  transition: background-color .8s cubic-bezier(.4,0,.2,1),
+              color .8s cubic-bezier(.4,0,.2,1),
+              border-color .8s cubic-bezier(.4,0,.2,1),
+              box-shadow .8s cubic-bezier(.4,0,.2,1),
+              background .8s cubic-bezier(.4,0,.2,1) !important;
 }
 
 .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
