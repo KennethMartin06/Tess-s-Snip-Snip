@@ -442,8 +442,8 @@ body.light .btn-book:hover { color: #fff; }
   width: 100%; max-width: 320px; padding: 14px 24px; border-radius: 50px;
   font-size: .95rem; font-weight: 600; text-decoration: none; transition: all 0.3s ease;
 }
-.whatsapp-btn.btn-primary { background: #25D366; color: #fff; border: none; }
-.whatsapp-btn.btn-primary:hover { background: #1ebe5a; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+.whatsapp-btn.btn-primary { border: 1.5px solid var(--clr-accent); color: var(--clr-accent); background: transparent; }
+.whatsapp-btn.btn-primary:hover { background: var(--clr-accent); color: var(--clr-bg); transform: translateY(-2px); }
 .whatsapp-btn.btn-outline { border: 1.5px solid var(--clr-accent); color: var(--clr-accent); background: transparent; }
 .whatsapp-btn.btn-outline:hover { background: var(--clr-accent); color: var(--clr-bg); transform: translateY(-2px); }
 
