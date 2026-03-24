@@ -278,7 +278,7 @@ body.light .btn-book:hover { color: #fff; }
 
 /* ===== GALLERY ===== */
 .gallery { background: var(--clr-surface); }
-.gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.gallery-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
 .gallery-item {
   aspect-ratio: 3/4; border-radius: var(--radius); overflow: hidden;
   position: relative; cursor: pointer;

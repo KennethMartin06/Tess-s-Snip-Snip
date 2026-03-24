@@ -295,29 +295,24 @@ addReviewForm.addEventListener('submit', (e) => {
     });
 })();
 
-// ===== SERVICE CARD BOOKING =====
-document.querySelectorAll('.service-card').forEach(card => {
-  card.style.cursor = 'pointer';
-  card.addEventListener('click', () => {
-    const serviceName = card.dataset.service;
-    if (!serviceName) return;
-
-    // Pre-select the service in the booking form
-    const serviceSelect = document.getElementById('serviceSelect');
-    for (let i = 0; i < serviceSelect.options.length; i++) {
-      if (serviceSelect.options[i].text === serviceName) {
-        serviceSelect.selectedIndex = i;
-        break;
-      }
+// ===== SERVICE CARD & GALLERY BOOKING =====
+function bookService(serviceName) {
+  const serviceSelect = document.getElementById('serviceSelect');
+  for (let i = 0; i < serviceSelect.options.length; i++) {
+    if (serviceSelect.options[i].text === serviceName) {
+      serviceSelect.selectedIndex = i;
+      break;
     }
+  }
+  bookingForm.classList.remove('hidden');
+  bookingSuccess.classList.remove('active');
+  document.getElementById('booking').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-    // Make sure form is visible
-    bookingForm.classList.remove('hidden');
-    bookingSuccess.classList.remove('active');
-
-    // Scroll to booking
-    document.getElementById('booking').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+document.querySelectorAll('.service-card, .gallery-item').forEach(card => {
+  if (!card.dataset.service) return;
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => bookService(card.dataset.service));
 });
 
 // ===== SCROLL ANIMATIONS =====
