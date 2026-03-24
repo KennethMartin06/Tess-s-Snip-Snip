@@ -35,6 +35,22 @@ function createReviewCard(r) {
   return card;
 }
 
+// ===== THEME TOGGLE =====
+const themeToggle = document.getElementById('themeToggle');
+const savedTheme = localStorage.getItem('tess_snipsnip_theme');
+
+if (savedTheme === 'light') {
+  document.body.classList.add('light');
+  themeToggle.innerHTML = '&#9728;';
+}
+
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light');
+  const isLight = document.body.classList.contains('light');
+  themeToggle.innerHTML = isLight ? '&#9728;' : '&#9790;';
+  localStorage.setItem('tess_snipsnip_theme', isLight ? 'light' : 'dark');
+});
+
 // ===== NAVBAR SCROLL =====
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {

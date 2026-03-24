@@ -16,6 +16,18 @@
   --transition: .35s cubic-bezier(.4,0,.2,1);
 }
 
+/* Light mode */
+body.light {
+  --clr-bg: #f5f0eb;
+  --clr-surface: #ffffff;
+  --clr-surface-2: #ece6df;
+  --clr-accent: #a07850;
+  --clr-accent-light: #7a5c3a;
+  --clr-text: #1a1410;
+  --clr-text-muted: #6b6460;
+  --clr-border: rgba(160,120,80,.18);
+}
+
 html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
@@ -80,6 +92,15 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   font-weight: 500 !important;
 }
 .nav-cta:hover { background: var(--clr-accent-light) !important; }
+
+/* Theme toggle */
+.theme-toggle {
+  background: none; border: 1.5px solid var(--clr-border); border-radius: 50%;
+  width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; color: var(--clr-text); transition: var(--transition);
+  margin-right: 8px;
+}
+.theme-toggle:hover { border-color: var(--clr-accent); color: var(--clr-accent); }
 
 .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
 .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--clr-text); border-radius: 2px; transition: var(--transition); }
@@ -383,6 +404,35 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   text-align: center; padding: 28px 0; margin-top: 48px;
   border-top: 1px solid var(--clr-border); font-size: .78rem; color: var(--clr-text-muted);
 }
+
+/* ===== LIGHT MODE OVERRIDES ===== */
+body.light .hero {
+  background: linear-gradient(135deg, #f5f0eb 0%, #ece6df 40%, #f0ebe4 100%);
+}
+body.light .hero-overlay {
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgba(160,120,80,.08) 0%, transparent 70%),
+    radial-gradient(circle at 80% 20%, rgba(160,120,80,.05) 0%, transparent 40%),
+    radial-gradient(circle at 20% 80%, rgba(160,120,80,.04) 0%, transparent 50%);
+}
+body.light .hero-particles span { background: rgba(160,120,80,.2); }
+body.light .navbar.scrolled {
+  background: rgba(245,240,235,.92); box-shadow: 0 2px 40px rgba(0,0,0,.08);
+}
+body.light .gallery-label {
+  background: linear-gradient(to top, rgba(255,255,255,.85) 0%, transparent 100%);
+  color: var(--clr-text);
+}
+body.light .review-avatar { color: #fff; }
+body.light .hero-line {
+  background: linear-gradient(90deg, transparent, var(--clr-accent), transparent);
+}
+body.light .nav-cta { color: #fff !important; }
+body.light .nav-cta:hover { color: #fff !important; }
+body.light .btn-primary:hover { color: #fff; }
+body.light .btn-outline:hover { color: #fff; }
+body.light .slot input:checked + span { color: #fff; }
+body.light .success-icon { color: #fff; }
 
 /* ===== ANIMATIONS ===== */
 .fade-in {
